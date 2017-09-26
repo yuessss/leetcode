@@ -1,0 +1,154 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+ 方法一：超时
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        int len = lists.length;
+        //边界条件判断
+        if(len == 0){
+            return null;
+        }
+        if(len == 1){
+            return lists[0];
+        }
+        // ListNode[] help = new ListNode[len];
+        // for(int i=0;i<len;i++){
+        //     help[i] = lists[i]; //设置首节点作为指着节点
+        // }
+        ListNode p = null;
+        ListNode newHead = null;
+        int min=Integer.MAX_VALUE;
+        int j = -1;
+        boolean flag = true;
+        while(flag){
+            flag = false;
+            for(int i=0;i<len;i++){
+                if(lists[i]!=null){
+                    if(lists[i].val <min){
+                        min = lists[i].val;
+                        j = i;
+                        flag = true;
+                    }
+                }
+            }
+        //找到这一轮的最小值
+            if(flag&&newHead == null){
+                newHead = lists[j];
+                p = lists[j];
+                lists[j] = lists[j].next;
+            }else if(flag){
+                p.next = lists[j];
+                p = lists[j];
+                lists[j] = lists[j].next;
+            }
+        //如果还有能链接的就继续循环，如果没有就退出即可
+            min = Integer.MAX_VALUE; //每一轮找一个min
+        }
+        return newHead;
+    }
+}
+方法二：依次合并，超时！
+class Solution {
+    public ListNode Merge2List(ListNode l1,ListNode l2){
+		//合并l1,l2
+		if(l1 == null){
+			return l2;
+		}
+		if(l2 == null){
+			return l1;
+		}
+		//构造新的头结点
+		ListNode newHead = new ListNode(Integer.MAX_VALUE);
+		ListNode p = newHead;
+		while(l1!=null && l2!=null){
+			if(l1.val <= l2.val){
+				p.next = l1;
+				l1 = l1.next;
+			}else{
+				p.next = l2;
+				l2 = l2.next;
+			}
+			p = p.next;
+		}
+		if(l1!=null){
+			p.next = l1;
+		}
+		if(l2!=null){
+			p.next = l2;
+		}
+		return newHead.next;
+		
+	}
+    public ListNode mergeKLists(ListNode[] lists) {
+        int len = lists.length;
+        //边界条件判断
+        if(len == 0){
+            return null;
+        }
+        if(len == 1){
+            return lists[0];
+        }
+        //两两合并
+        ListNode newHead = Merge2List(lists[0],lists[1]);
+        for(int i=2;i<len;i++){
+            newHead = Merge2List(newHead,lists[i]);
+        }
+        return newHead;
+    }
+}
+方法三：两两合并，通过，两两合并的方法类似于二分查找的方法
+class Solution {
+    private ListNode Merge2List(ListNode l1,ListNode l2){
+		//合并l1,l2
+		if(l1 == null){
+			return l2;
+		}
+		if(l2 == null){
+			return l1;
+		}
+		//构造新的头结点
+		ListNode newHead = new ListNode(Integer.MAX_VALUE);
+		ListNode p = newHead;
+		while(l1!=null && l2!=null){
+			if(l1.val <= l2.val){
+				p.next = l1;
+				l1 = l1.next;
+			}else{
+				p.next = l2;
+				l2 = l2.next;
+			}
+			p = p.next;
+		}
+		if(l1!=null){
+			p.next = l1;
+		}
+		if(l2!=null){
+			p.next = l2;
+		}
+		return newHead.next;
+		
+	}
+    private ListNode helper(ListNode[] lists,int left,int right){
+        if(left<right){
+            int mid = (left+right)/2;
+            return Merge2List(helper(lists,left,mid),helper(lists,mid+1,right));
+        }
+        return lists[left];
+    }
+    public ListNode mergeKLists(ListNode[] lists) {
+        /*先把k个list分成两半，然后继续划分，直到剩下两个list就合并起来
+        */
+        int len = lists.length;
+        if(len==0){
+            return null;
+        }
+        return helper(lists,0,len-1);
+    }
+}
+##注：java类中public和private等修饰符的选择和使用
