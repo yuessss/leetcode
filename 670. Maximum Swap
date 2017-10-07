@@ -1,0 +1,25 @@
+public int maximumSwap(int num) {
+        /*
+        输入一个数字，最多交换一次，输出这几个数组组成的最大数
+        第一步要做的就是把int类型的数字，转换成字符串或者数组
+        */
+        StringBuffer strnum = new StringBuffer(String.valueOf(num));
+        int len = strnum.length();
+        for(int i=0;i<len;i++){
+            int index = i;  //index存的是下标
+            for(int j=i;j<len;j++){
+                if(strnum.charAt(j) >= strnum.charAt(index)){
+                    index = j;
+                }
+            }
+            //index 是否和i相同，如果相同，则继续循环，不同则交换i和index的值，然后退出循环
+            if(index != i && strnum.charAt(index) > strnum.charAt(i)){
+                char t = strnum.charAt(i);
+                strnum.setCharAt(i,strnum.charAt(index));
+                strnum.setCharAt(index,t);
+                break;
+            }
+        }
+        //然后将string类型转换成int类型
+        return Integer.parseInt(strnum.toString());
+    }
