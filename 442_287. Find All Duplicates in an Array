@@ -18,3 +18,27 @@ public List<Integer> findDuplicates(int[] nums) {
         }
         return result;
     }
+    
+    
+    
+    ## 相似题目：
+    
+    287. Find the Duplicate Number
+    public int findDuplicate(int[] nums) {
+        /*
+        还是数组n+1个数字，1<=arr[i]<=n
+        有且只有一个数字重复，可能重复很多次
+        */
+        int len = nums.length;
+        int result = 0;
+        for(int i=0;i<len;i++){
+            int next = Math.abs(nums[i]) -1;
+            if(nums[next] <0 ){
+                result =  Math.abs(nums[i]);
+                break;
+            }else{
+                nums[next] = -nums[next]; 
+            }
+        }
+        return result;
+    }
