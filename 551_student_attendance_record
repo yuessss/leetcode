@@ -1,0 +1,30 @@
+public boolean checkRecord(String s) {
+        /*
+        A的个数大于1或者连续出现连续的三个L
+        都视为false
+        */
+        int len = s.length();
+        if(len == 0 || s == ""){
+            return false;
+        }
+        int[] dp = new int[len+1];
+        for(int i=0;i<len+1;i++){
+            dp[i] = 0;
+        }
+        int Asum = 0;
+        for(int i=0;i<len;i++){
+            char c = s.charAt(i);
+            if(c == 'A'){
+               Asum++;
+                if(Asum >1){
+                    return false;
+                }
+            }else if(c == 'L'){
+                dp[i+1] = dp[i] +1;
+                if(dp[i+1] >2){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
